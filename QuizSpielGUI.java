@@ -315,7 +315,6 @@ public class QuizSpielGUI {
                     }
 
                     if (frage.istAntwortRichtig(auswahlIndex)) {
-                        JOptionPane.showMessageDialog(frame, "Richtig! Die Tür öffnet sich...");
                         aktuelleFrageIndex++;
                         zeigeNaechsteFrage();
                     } else {
@@ -364,8 +363,6 @@ public class QuizSpielGUI {
         }
         starteCountdown();
     }
-
-    // --- Rest bleibt gleich ---
 
     private void beendeSpiel() {
         if (spielBeendet) return;
@@ -517,22 +514,14 @@ public class QuizSpielGUI {
             }
         }
         ergebnis.append("</center></html>");
-        JOptionPane.showMessageDialog(frame, ergebnis.toString(), "Spiel beendet", JOptionPane.INFORMATION_MESSAGE);
 
-        int wahl = JOptionPane.showOptionDialog(
-                null,
-                "Was möchtest du tun?",
-                "Weiter",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                new String[]{"Nochmal spielen", "Zurück zum Hauptmenü", "Beenden"},
-                "Nochmal spielen"
-        );
+        // EscapeRoom-Style-EndeDialog (3 Buttons)
+        EndeDialog dialog = new EndeDialog(null, ergebnis.toString());
+        dialog.setVisible(true);
         frame.dispose();
-        if (wahl == 0) {
+        if (dialog.auswahl == 0) {
             Main.restartLastMode();
-        } else if (wahl == 1) {
+        } else if (dialog.auswahl == 1) {
             Main.showMainMenu();
         } else {
             System.exit(0);
