@@ -79,7 +79,9 @@ public class Main {
                         "Deine IP-Adresse: " + ipAddress + "\n\n" +
                         "Teile diese IP-Adresse mit dem anderen Spieler!\n" +
                         "Warte auf zweiten Spieler...";
-                JOptionPane.showMessageDialog(null, serverInfo, "Server Info", JOptionPane.INFORMATION_MESSAGE);
+
+                // Eigenes Dialogfenster statt JOptionPane
+                new InfoDialog(null, "Server Info", serverInfo).setVisible(true);
 
                 QuizServer server = new QuizServer();
                 new Thread(() -> {
@@ -88,7 +90,7 @@ public class Main {
                     } catch (IOException e) {
                         e.printStackTrace();
                         SwingUtilities.invokeLater(() ->
-                                JOptionPane.showMessageDialog(null, "Fehler beim Starten des Servers: " + e.getMessage())
+                                new InfoDialog(null, "Fehler", "Fehler beim Starten des Servers: " + e.getMessage()).setVisible(true)
                         );
                     }
                 }).start();
@@ -97,7 +99,7 @@ public class Main {
                 serverDialog.setVisible(true);
                 letzterServerAddress = serverDialog.serverAdresse;
                 if (letzterServerAddress == null || letzterServerAddress.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Keine Server-Adresse eingegeben!");
+                    new InfoDialog(null, "Fehler", "Keine Server-Adresse eingegeben!").setVisible(true);
                     showMainMenu();
                     return;
                 }
@@ -105,7 +107,9 @@ public class Main {
                 if (letzterName == null || letzterName.isEmpty()) letzterName = "Client";
                 final String finalServerAddress = letzterServerAddress.trim();
                 final String finalClientName = letzterName;
-                JOptionPane.showMessageDialog(null, "Verbinde zum Server: " + finalServerAddress + ":6666\n\nBitte warten...");
+
+                new InfoDialog(null, "Verbinden", "Verbinde zum Server: " + finalServerAddress + ":6666\n\nBitte warten...").setVisible(true);
+
                 new Thread(() -> {
                     try {
                         QuizClient client = new QuizClient(finalServerAddress, 6666);
@@ -113,9 +117,7 @@ public class Main {
                     } catch (IOException e) {
                         e.printStackTrace();
                         SwingUtilities.invokeLater(() ->
-                                JOptionPane.showMessageDialog(null,
-                                        "Fehler beim Verbinden zum Server!\n\n" +
-                                                "Technischer Fehler: " + e.getMessage())
+                                new InfoDialog(null, "Fehler", "Fehler beim Verbinden zum Server!\n\nTechnischer Fehler: " + e.getMessage()).setVisible(true)
                         );
                     }
                 }).start();
@@ -135,9 +137,7 @@ public class Main {
                     } catch (IOException e) {
                         e.printStackTrace();
                         SwingUtilities.invokeLater(() ->
-                                JOptionPane.showMessageDialog(null,
-                                        "Fehler beim Verbinden zum Server!\n\n" +
-                                                "Technischer Fehler: " + e.getMessage())
+                                new InfoDialog(null, "Fehler", "Fehler beim Verbinden zum Server!\n\nTechnischer Fehler: " + e.getMessage()).setVisible(true)
                         );
                     }
                 }).start();
